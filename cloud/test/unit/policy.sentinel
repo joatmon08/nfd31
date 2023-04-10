@@ -1,0 +1,27 @@
+import "tfplan/v2" as tfplan
+
+aws_vpcs = filter tfplan.planned_values.resources as _, resources {
+    resources.type is "aws_vpc" and
+  		resources.name is "nfd"
+}
+
+aws_subnets = filter tfplan.planned_values.resources as _, resources {
+    resources.type is "aws_subnet"
+}
+
+aws_vpcs_have_correct_mask = rule {
+    all aws_vpcs as _, aws_vpcs {
+        aws_vpcs.values.cidr_block contains "/20"
+    }
+}
+
+aws_subnets_have_correct_mask = rule {
+    all aws_subnets as _, aws_subnets {
+        aws_subnets.values.cidr_block contains "/24"
+    }
+}
+
+main = rule {
+  	aws_vpcs_have_correct_cidr_block or
+    aws_subnets_have_correct_cidr_blocks
+}

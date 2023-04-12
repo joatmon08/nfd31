@@ -22,6 +22,6 @@ aws_subnets_have_correct_mask = rule {
 }
 
 main = rule {
-  	aws_vpcs_have_correct_cidr_block or
-    aws_subnets_have_correct_cidr_blocks
+  	aws_vpcs_have_correct_mask and
+    aws_subnets_have_correct_mask
 }

@@ -58,6 +58,12 @@ resource "aws_route" "public_internet_access" {
   gateway_id             = aws_internet_gateway.igw.id
 }
 
+resource "aws_route" "azure_peering" {
+  route_table_id         = aws_route_table.public.id
+  destination_cidr_block = "10.252.0.0/20"
+  gateway_id             = aws_nat_gateway.nat.id
+}
+
 ## Private Route Table
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.nfd.id

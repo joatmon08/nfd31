@@ -2,6 +2,10 @@ variable "region" {
   type        = string
   default     = "us-east-1"
   description = "AWS Region"
+  validation {
+    condition     = startswith(var.region, "us-")
+    error_message = "Only use AWS regions in US"
+  }
 }
 
 variable "location" {

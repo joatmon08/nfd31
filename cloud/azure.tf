@@ -20,7 +20,7 @@ resource "azurerm_virtual_network" "nfd" {
 
   lifecycle {
     postcondition {
-      condition     = module.aws.vpc_cidr_block == self.address_space.0
+      condition     = self.address_space.0 != module.aws.vpc_cidr_block
       error_message = "The network CIDR for AWS must not equal Azure for peering purposes."
     }
   }

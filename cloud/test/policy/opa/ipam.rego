@@ -4,9 +4,10 @@ import input.plan as tfplan
 
 deny[msg] {
   aws_range := "10.255.0.0/16"
+  aws_range_v2 := "10.0.0.0/16"
   r := tfplan.planned_values.root_module.child_modules[0].resources[_]
   r.type == "aws_vpc"
-  not net.cidr_contains(aws_range, r.values.cidr_block)
+  not net.cidr_contains(aws_range, r.values.cidr_block) or not net.cidr_contains(aws_range_v2, r.values.cidr_block)
   msg := sprintf("%v not in allocated range %v for AWS", [r.address, aws_range])
 }
 

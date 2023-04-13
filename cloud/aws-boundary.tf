@@ -20,10 +20,10 @@ module "boundary" {
   vpc_id                       = module.aws.vpc_id
 }
 
-module "boundary" {
+module "boundary_v2" {
   source                       = "joatmon08/boundary/aws"
   version                      = "0.3.1"
-  name                         = "${var.main_project_tag}-boundary-v2"
+  name                         = "${local.main_project_tag_v2}-boundary"
   allow_cidr_blocks_to_api     = var.allow_cidr_blocks
   allow_cidr_blocks_to_workers = var.allow_cidr_blocks
   boundary_db_username         = var.boundary_db_username

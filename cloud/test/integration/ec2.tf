@@ -15,7 +15,7 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_instance" "test" {
-  count                  = var.subnet_ids
+  count                  = length(var.subnet_ids)
   instance_type          = "t2.micro"
   ami                    = data.aws_ami.ubuntu.id
   vpc_security_group_ids = [aws_security_group.test.id]
@@ -35,8 +35,8 @@ resource "aws_security_group" "test" {
   ingress {
     from_port   = 22
     to_port     = 22
-    protocol    = "ssh"
-    cidr_blocks = [var.vpc_cidr]
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -49,5 +49,22 @@ resource "aws_security_group" "test" {
   tags = {
     Name    = "${var.main_project_tag}"
     Purpose = "Testing VPC"
+  }
+}
+
+resource "terraform_data" "test" {
+  count            = length(aws_instance.test)
+  triggers_replace = [aws_instance.test[count.index].id]
+
+  connection {
+    host        = aws_instance.test[count.index].public_ip
+    user        = "ubuntu"
+    private_key = file(var.key_pair_private_key_path)
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo success"
+    ]
   }
 }

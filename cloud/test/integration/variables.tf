@@ -21,3 +21,7 @@ variable "subnet_ids" {
 variable "key_pair_name" {
   type = string
 }
+
+variable "key_pair_private_key_path" {
+  type = string
+}

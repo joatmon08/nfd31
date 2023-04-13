@@ -21,11 +21,11 @@ module "aws_v2" {
 
 output "test_variables" {
   value     = <<EOT
-main_project_tag = "${var.main_project_tag}"
+main_project_tag = "${local.main_project_tag_v2}"
 region = "${var.region}"
-vpc_id = "${module.aws.vpc_id}"
-vpc_cidr = "${module.aws.vpc_cidr_block}"
-subnet_ids = ${jsonencode(module.aws.public_subnets)}
+vpc_id = "${module.aws_v2.vpc_id}"
+vpc_cidr = "${module.aws_v2.vpc_cidr_block}"
+subnet_ids = ${jsonencode(module.aws_v2.public_subnets)}
 EOT
   sensitive = true
 }

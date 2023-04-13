@@ -23,7 +23,7 @@ variable "main_project_tag" {
 variable "network_cidr" {
   description = "Cidr block for the VPC.  Using a /16 or /20 Subnet Mask is recommended."
   type        = string
-  default     = "10.255.0.0/20"
+  default     = "10.0.0.0/20"
 }
 
 variable "allow_cidr_blocks" {

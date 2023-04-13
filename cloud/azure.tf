@@ -9,7 +9,7 @@ resource "azurerm_resource_group" "nfd" {
 
 data "aws_vpc" "nfd31" {
   depends_on = [
-    module.aws_v2
+    module.aws
   ]
   tags = {
     "Project" = var.main_project_tag

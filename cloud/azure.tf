@@ -16,6 +16,10 @@ data "aws_vpc" "nfd31" {
   }
 }
 
+locals {
+  aws_cidr_block_associations = [for c in data.aws_vpc.nfd31.cidr_block_associations : c.cidr_block if c.state == "associated"]
+}
+
 resource "azurerm_virtual_network" "nfd" {
   name                = "${var.main_project_tag}-vnet"
   location            = azurerm_resource_group.nfd.location
@@ -29,7 +33,7 @@ resource "azurerm_virtual_network" "nfd" {
 
   lifecycle {
     postcondition {
-      condition     = !contains(data.aws_vpc.nfd31.cidr_block_associations.*.cidr_block, self.address_space.0)
+      condition     = !contains(local.aws_cidr_block_associations, self.address_space.0)
       error_message = "The CIDR blocks for AWS VPCs must not equal Azure virtual networks for peering purposes."
     }
   }
